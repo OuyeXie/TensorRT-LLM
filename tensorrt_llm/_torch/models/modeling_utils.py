@@ -158,10 +158,17 @@ class DecoderModelForCausalLM(nn.Module, Generic[TModel, TConfig]):
             parallel_config=ParallelConfig(
                 tensor_parallel_rank=config.mapping.tp_rank,
                 tensor_parallel_size=config.mapping.tp_size,
-                tensor_parallel_mode=TensorParallelMode.COLUMN,
+                tensor_parallel_mode=None,
                 gather_output=True,
             ),
         )
+        
+        print(f"==========self.lm_head.tp_size: {self.lm_head.tp_size}")
+        print(f"==========self.lm_head.tp_mode: {self.lm_head.tp_mode}")
+
+        print(f"==========self.model.embed_tokens.tp_size: {self.model.embed_tokens.tp_size}")
+        print(f"==========self.model.embed_tokens.tp_mode: {self.model.embed_tokens.tp_mode}")
+
         # use embedding weights in lm_head if tie word embedding is enabled
         if config.pretrained_config.tie_word_embeddings:
             assert self.lm_head.tp_size == self.model.embed_tokens.tp_size, (

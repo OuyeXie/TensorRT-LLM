@@ -181,6 +181,7 @@ class Qwen2ForCausalLM(DecoderModelForCausalLM[QwenModel, Qwen2Config]):
         self,
         model_config: ModelConfig[Qwen2Config],
     ):
+        print(f"==========model_config: {model_config}")
         super().__init__(QwenModel(model_config),
                          config=model_config,
                          hidden_size=model_config.pretrained_config.hidden_size,
