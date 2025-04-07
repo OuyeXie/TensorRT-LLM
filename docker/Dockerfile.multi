@@ -64,6 +64,8 @@ RUN bash ./install_pytorch.sh $TORCH_INSTALL_TYPE && rm install_pytorch.sh
 
 FROM ${DEVEL_IMAGE} AS wheel
 WORKDIR /src/tensorrt_llm
+
+# Requires whole repo to be copied, including .git
 COPY . .
 
 # Create cache directories for pip and ccache
@@ -71,7 +73,6 @@ RUN mkdir -p /root/.cache/pip /root/.cache/ccache
 ENV CCACHE_DIR=/root/.cache/ccache
 # Build the TRT-LLM wheel
 ARG BUILD_WHEEL_ARGS="--clean --trt_root /usr/local/tensorrt --python_bindings --benchmarks"
-
 RUN --mount=type=cache,target=/root/.cache/pip --mount=type=cache,target=/root/.cache/ccache \
     python3 scripts/build_wheel.py ${BUILD_WHEEL_ARGS}
 
