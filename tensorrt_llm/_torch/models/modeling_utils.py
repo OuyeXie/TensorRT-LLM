@@ -224,6 +224,7 @@ class DecoderModelForCausalLM(nn.Module, Generic[TModel, TConfig]):
         }
         for name, module in tqdm(list(self.named_modules()),
                                  desc="Loading weights"):
+            print(f"==========loading weights for name: {name}")
             if len(module._parameters) > 0:
                 # skip load weights if tie word embeddings is enabled and layer is lm_head
                 if self.config.tie_word_embeddings and name.startswith(
